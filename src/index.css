@@ -1,9 +1,9 @@
 @import "tailwindcss";
 
-:root{font-family:"DM Sans",sans-serif;color:#24211c;background:#f5f1e9;font-synthesis:none;text-rendering:optimizeLegibility}
-html{scroll-behavior:smooth;background:#171512}
-body{margin:0;min-width:320px;background:#f5f1e9}
-h1,h2,h3,.serif{font-family:"Playfair Display",serif}
+:root{font-family:"Avenir Next","Segoe UI",Arial,sans-serif;color:#24211c;background:#f4efe6;font-synthesis:none;text-rendering:optimizeLegibility}
+html{scroll-behavior:smooth;background:#15130f}
+body{margin:0;min-width:320px;background:#f4efe6}
+h1,h2,h3,.serif{font-family:Iowan Old Style,"Palatino Linotype","Book Antiqua",Palatino,Georgia,serif}
 ::selection{background:#b69a63;color:#fff}
 *{box-sizing:border-box}
 ::before,::after{box-sizing:border-box}
