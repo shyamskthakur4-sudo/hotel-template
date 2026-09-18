@@ -1,74 +1,166 @@
-import React,{useState} from "react";
+import React,{useRef,useState} from "react";
 import {createRoot} from "react-dom/client";
 import {motion,useScroll,useTransform} from "motion/react";
-import {ArrowUpRight,ChevronDown,MapPin,Phone,Mail,Menu,X,Star,Sparkles,Clock3} from "lucide-react";
+import {ArrowDownRight,ArrowUpRight,MapPin,Phone,Mail,Menu,X,Clock3,Compass,Utensils,Leaf,Star} from "lucide-react";
 import "./index.css";
 
-const images={
- hero:"https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=2200&q=88",
- room:"https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&w=1500&q=85",
- dining:"https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1500&q=85",
- lounge:"https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1500&q=85",
- heritage:"https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=1500&q=85"
+const media={
+  hero:"https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=2200&q=88",
+  room:"https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&w=1800&q=88",
+  dining:"https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1800&q=88",
+  lounge:"https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1800&q=88",
+  pool:"https://images.unsplash.com/photo-1572331165267-854da2b10ccc?auto=format&fit=crop&w=1800&q=88",
+  heritage:"https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=1800&q=88"
 };
-const reveal={hidden:{opacity:0,y:32},visible:{opacity:1,y:0,transition:{duration:.8,ease:[.22,1,.36,1]}}};
 
-function ParallaxImage({src,alt,className=""}){
- const ref=React.useRef(null); const {scrollYProgress}=useScroll({target:ref,offset:["start end","end start"]});
- const y=useTransform(scrollYProgress,[0,1],["-7%","7%"]);
- const scale=useTransform(scrollYProgress,[0,1],[1.06,1.13]);
- return <div ref={ref} className={"relative overflow-hidden "+className}><motion.img src={src} alt={alt} style={{y,scale}} className="absolute inset-0 h-full w-full object-cover"/><div className="absolute inset-0 bg-black/5"/></div>
+const ease=[0.22,1,0.36,1];
+const reveal={
+  hidden:{opacity:0,y:42},
+  visible:{opacity:1,y:0,transition:{duration:.8,ease}}
+};
+
+function DepthFrame({src,alt,className="",overlay=true}){
+  const ref=useRef(null);
+  const {scrollYProgress}=useScroll({target:ref,offset:["start end","end start"]});
+  const y=useTransform(scrollYProgress,[0,1],["-9%","9%"]);
+  const scale=useTransform(scrollYProgress,[0,1],[1.08,1.18]);
+  return <div ref={ref} className={"relative overflow-hidden "+className}>
+    <motion.img src={src} alt={alt} style={{y,scale}} className="absolute inset-0 h-full w-full object-cover will-change-transform"/>
+    {overlay&&<div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-black/5"/>}
+  </div>;
+}
+
+function ExperienceScene(){
+  const ref=useRef(null);
+  const {scrollYProgress}=useScroll({target:ref,offset:["start end","end start"]});
+  const rotateX=useTransform(scrollYProgress,[0,.48,1],[12,0,-8]);
+  const rotateY=useTransform(scrollYProgress,[0,.5,1],[-8,0,8]);
+  const y=useTransform(scrollYProgress,[0,1],[80,-80]);
+  const scale=useTransform(scrollYProgress,[0,.48,1],[.88,1,.92]);
+  const imageY=useTransform(scrollYProgress,[0,1],["8%","-8%"]);
+  return <section ref={ref} id="experience" className="relative overflow-hidden bg-[#171512] py-32 text-white md:py-44">
+    <div className="absolute inset-0 opacity-30 [background-image:radial-gradient(circle_at_20%_20%,rgba(196,163,102,.18),transparent_32%),radial-gradient(circle_at_80%_70%,rgba(255,255,255,.06),transparent_28%)]"/>
+    <div className="relative mx-auto max-w-7xl px-6 md:px-10">
+      <div className="grid gap-16 lg:grid-cols-[.65fr_1.35fr] lg:items-center">
+        <motion.div variants={reveal} initial="hidden" whileInView="visible" viewport={{once:true}} className="max-w-xl">
+          <div className="mb-5 flex items-center gap-3 text-[10px] uppercase tracking-[.3em] text-[#d6bc83]"><span className="h-px w-8 bg-[#d6bc83]"/>A slower kind of luxury</div>
+          <h2 className="serif text-5xl leading-[.94] md:text-7xl">The art of <em className="font-normal text-[#d6bc83]">staying.</em></h2>
+          <p className="mt-8 max-w-md text-sm leading-7 text-white/55 md:text-base">A good hotel disappears behind the experience. The light, the room, the table, the quiet — they simply make the day feel better.</p>
+          <div className="mt-10 flex gap-8 border-t border-white/10 pt-6 text-[10px] uppercase tracking-[.22em] text-white/45"><span>01 / Rest</span><span>02 / Gather</span><span>03 / Explore</span></div>
+        </motion.div>
+        <div className="relative [perspective:1400px]">
+          <motion.div style={{rotateX,rotateY,y,scale,transformStyle:"preserve-3d"}} className="relative mx-auto aspect-[1.22/1] max-w-3xl will-change-transform">
+            <div className="absolute inset-0 translate-x-5 translate-y-5 rounded-[2rem] border border-[#d6bc83]/20 bg-[#c5a56b]/5 [transform:translateZ(-55px)] md:translate-x-8 md:translate-y-8"/>
+            <div className="absolute -inset-4 rounded-[2.25rem] border border-white/10 [transform:translateZ(-25px)]"/>
+            <div className="absolute inset-0 overflow-hidden rounded-[2rem] shadow-[0_45px_120px_rgba(0,0,0,.5)] [transform:translateZ(30px)]">
+              <motion.img src={media.lounge} alt="Raj Villas lounge" style={{y:imageY,scale:1.12}} className="absolute inset-0 h-full w-full object-cover"/>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-white/5"/>
+              <div className="absolute bottom-7 left-7 right-7 flex items-end justify-between"><div><div className="text-[9px] uppercase tracking-[.28em] text-white/55">Raj Villas / Shivpuri</div><div className="serif mt-2 text-2xl">Quiet corners, warm light.</div></div><div className="grid h-11 w-11 place-items-center rounded-full border border-white/20 bg-white/10 backdrop-blur"><ArrowUpRight size={17}/></div></div>
+            </div>
+          </motion.div>
+        </div>
+      </div>
+    </div>
+  </section>;
 }
 
 function App(){
- const[open,setOpen]=useState(false),[roomOpen,setRoomOpen]=useState(false);
- const nav=["Stay","Experience","Dining","Discover","Contact"];
- const heroRef=React.useRef(null);
- const {scrollYProgress}=useScroll();
- const heroY=useTransform(scrollYProgress,[0,.22],["0%","18%"]);
- const heroScale=useTransform(scrollYProgress,[0,.22],[1,1.08]);
- const heroOpacity=useTransform(scrollYProgress,[0,.18],[1,0.76]);
- return <div className="overflow-x-hidden bg-[#f5f1e9] text-[#24211c]">
-  <header className="fixed inset-x-0 top-0 z-50"><div className="mx-auto mt-4 flex max-w-7xl items-center justify-between rounded-full border border-white/15 bg-[#171512]/78 px-5 py-3 text-white shadow-2xl backdrop-blur-xl md:px-7">
-   <a href="#top" className="flex items-center gap-3"><span className="grid h-9 w-9 place-items-center rounded-full border border-[#d4bd88]/50 text-[#d4bd88]"><span className="serif text-lg">R</span></span><span className="leading-none"><span className="serif block text-[17px] tracking-wide">Raj Villas</span><span className="mt-0.5 block text-[8px] uppercase tracking-[.32em] text-white/55">Shivpuri</span></span></a>
-   <nav className="hidden items-center gap-8 md:flex">{nav.map(n=><a key={n} href={"#"+n.toLowerCase()} className="text-[12px] uppercase tracking-[.18em] text-white/75 transition hover:text-[#d4bd88]">{n}</a>)}</nav>
-   <div className="hidden items-center gap-3 md:flex"><a href="tel:9999999990" className="rounded-full border border-white/15 px-4 py-2 text-[12px] font-medium hover:border-[#d4bd88]/60">Call us</a><button onClick={()=>setRoomOpen(true)} className="rounded-full bg-[#c5a56b] px-5 py-2.5 text-[12px] font-semibold text-[#171512] hover:bg-[#d9be89]">Reserve</button></div>
-   <button className="md:hidden" aria-label="Toggle menu" onClick={()=>setOpen(!open)}>{open?<X/>:<Menu/>}</button></div>
-   {open&&<div className="mx-4 mt-2 rounded-3xl border border-white/10 bg-[#171512]/95 p-6 text-white backdrop-blur-xl md:hidden"><div className="grid gap-5">{nav.map(n=><a onClick={()=>setOpen(false)} key={n} href={"#"+n.toLowerCase()} className="text-sm uppercase tracking-[.18em] text-white/75">{n}</a>)}</div><button onClick={()=>{setOpen(false);setRoomOpen(true)}} className="mt-6 w-full rounded-full bg-[#c5a56b] py-3 text-sm font-semibold text-[#171512]">Reserve your stay</button></div>}</header>
+  const[menu,setMenu]=useState(false),[reserve,setReserve]=useState(false);
+  const nav=[["Stay","#stay"],["Experience","#experience"],["Dining","#dining"],["Shivpuri","#discover"],["Contact","#contact"]];
+  const heroRef=useRef(null);
+  const {scrollYProgress}=useScroll({target:heroRef,offset:["start start","end start"]});
+  const heroScale=useTransform(scrollYProgress,[0,1],[1,1.16]);
+  const heroY=useTransform(scrollYProgress,[0,1],["0%","22%"]);
+  const heroTextY=useTransform(scrollYProgress,[0,1],[0,-120]);
+  const heroOpacity=useTransform(scrollYProgress,[0,.72],[1,0]);
 
-  <main id="top">
-   <section ref={heroRef} className="relative min-h-[100dvh] overflow-hidden bg-[#171512]">
-    <motion.img src={images.hero} alt="Elegant luxury hotel interior" style={{y:heroY,scale:heroScale,opacity:heroOpacity}} className="absolute inset-0 h-full w-full object-cover"/>
-    <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(18,16,13,.84),rgba(18,16,13,.36),rgba(18,16,13,.18))]"/><div className="absolute inset-0 bg-gradient-to-t from-[#171512] via-transparent to-[#171512]/20"/>
-    <div className="relative mx-auto flex min-h-[100dvh] max-w-7xl items-end px-6 pb-16 pt-32 md:px-10 md:pb-20"><div className="max-w-3xl text-white">
-      <motion.div initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{duration:.7}} className="mb-6 flex items-center gap-3 text-[11px] uppercase tracking-[.28em] text-[#d9be89]"><span className="h-px w-10 bg-[#d9be89]"/>A refined stay in Shivpuri</motion.div>
-      <motion.h1 initial={{opacity:0,y:30}} animate={{opacity:1,y:0}} transition={{duration:.9,delay:.08}} className="serif max-w-3xl text-5xl leading-[.95] sm:text-6xl md:text-8xl">Stay somewhere <em className="font-normal text-[#d9be89]">with a story.</em></motion.h1>
-      <motion.p initial={{opacity:0,y:24}} animate={{opacity:1,y:0}} transition={{duration:.8,delay:.22}} className="mt-7 max-w-xl text-sm leading-7 text-white/72 md:text-base">Raj Villas Hotel brings warm Indian hospitality, restful rooms and a quietly grand atmosphere to the heart of Shivpuri, Madhya Pradesh.</motion.p>
-      <motion.div initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{duration:.8,delay:.34}} className="mt-9 flex flex-wrap gap-3"><button onClick={()=>setRoomOpen(true)} className="flex items-center gap-2 rounded-full bg-[#c5a56b] px-6 py-3 text-sm font-semibold text-[#171512]">Plan your stay <ArrowUpRight size={16}/></button><a href="#discover" className="flex items-center gap-2 rounded-full border border-white/25 bg-white/5 px-6 py-3 text-sm text-white backdrop-blur-sm">Explore Shivpuri</a></motion.div>
-    </div></div>
-    <div className="absolute bottom-8 right-7 hidden items-center gap-3 text-[10px] uppercase tracking-[.25em] text-white/50 md:flex"><span>Scroll to explore</span><ChevronDown size={15}/></div>
-   </section>
+  return <div className="min-h-screen overflow-x-hidden bg-[#f4efe6] text-[#25221d]">
+    <header className="fixed inset-x-0 top-0 z-50">
+      <div className="mx-auto mt-4 flex max-w-[1400px] items-center justify-between px-4 md:px-8">
+        <div className="flex w-full items-center justify-between rounded-full border border-white/15 bg-[#141310]/76 px-5 py-3 text-white shadow-[0_18px_50px_rgba(0,0,0,.24)] backdrop-blur-xl md:px-7">
+          <a href="#top" className="flex items-center gap-3">
+            <span className="grid h-9 w-9 place-items-center rounded-full border border-[#d4bc83]/50 text-[#d4bc83]"><span className="serif text-lg">R</span></span>
+            <span><span className="serif block text-[16px] leading-none">Raj Villas</span><span className="mt-1 block text-[8px] uppercase tracking-[.34em] text-white/45">Shivpuri</span></span>
+          </a>
+          <nav className="hidden items-center gap-8 lg:flex">{nav.map(([label,href])=><a key={href} href={href} className="text-[10px] uppercase tracking-[.22em] text-white/65 transition-colors hover:text-[#d9c18a]">{label}</a>)}</nav>
+          <div className="hidden items-center gap-2 md:flex"><a href="tel:9999999990" className="rounded-full px-4 py-2 text-[11px] uppercase tracking-[.12em] text-white/65 hover:text-white">Call</a><button onClick={()=>setReserve(true)} className="rounded-full bg-[#c5a56b] px-5 py-2.5 text-[11px] font-semibold uppercase tracking-[.12em] text-[#15130f] transition-transform hover:scale-[1.03]">Reserve</button></div>
+          <button className="md:hidden" aria-label="Open menu" onClick={()=>setMenu(!menu)}>{menu?<X/>:<Menu/>}</button>
+        </div>
+      </div>
+      {menu&&<div className="mx-4 mt-2 rounded-3xl border border-white/10 bg-[#141310]/96 p-6 text-white backdrop-blur-xl md:hidden"><div className="grid gap-5">{nav.map(([label,href])=><a key={href} href={href} onClick={()=>setMenu(false)} className="text-sm uppercase tracking-[.2em] text-white/70">{label}</a>)}</div><button onClick={()=>{setMenu(false);setReserve(true)}} className="mt-7 w-full rounded-full bg-[#c5a56b] py-3 text-sm font-semibold text-[#15130f]">Reserve your stay</button></div>}
+    </header>
 
-   <section id="stay" className="mx-auto max-w-7xl px-6 py-24 md:px-10 md:py-32"><motion.div variants={reveal} initial="hidden" whileInView="visible" viewport={{once:true}} className="grid gap-12 md:grid-cols-[.75fr_1.25fr] md:items-end"><div><div className="text-[10px] uppercase tracking-[.28em] text-[#9b7b43]">The hotel</div><h2 className="serif mt-4 text-4xl leading-tight sm:text-5xl md:text-6xl">A gracious base for <span className="text-[#9b7b43]">slow days.</span></h2></div><div className="max-w-2xl"><p className="text-base leading-8 text-[#5b5449]">Designed for unhurried mornings, easy conversations and comfortable nights, Raj Villas is a natural choice for leisure travellers, families and guests discovering Shivpuri.</p><div className="mt-8 flex flex-wrap gap-8 text-xs uppercase tracking-[.18em] text-[#7c7467]"><span className="flex items-center gap-2"><Sparkles size={15} className="text-[#b08d51]"/>Warm hospitality</span><span className="flex items-center gap-2"><Clock3 size={15} className="text-[#b08d51]"/>24/7 front desk</span><span className="flex items-center gap-2"><MapPin size={15} className="text-[#b08d51]"/>Shivpuri, MP</span></div></div></motion.div></section>
+    <main id="top">
+      <section ref={heroRef} className="relative min-h-[100dvh] overflow-hidden bg-[#15130f]">
+        <motion.img src={media.hero} alt="Luxury hotel interior" style={{scale:heroScale,y:heroY}} className="absolute inset-0 h-full w-full object-cover will-change-transform"/>
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(15,13,10,.9)_0%,rgba(15,13,10,.48)_45%,rgba(15,13,10,.1)_100%)]"/>
+        <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(15,13,10,.9),transparent_45%,rgba(15,13,10,.28))]"/>
+        <motion.div style={{y:heroTextY,opacity:heroOpacity}} className="relative flex min-h-[100dvh] items-end pb-16 pt-36 md:pb-24">
+          <div className="mx-auto w-full max-w-[1400px] px-6 md:px-10">
+            <div className="max-w-4xl">
+              <motion.div initial={{opacity:0,x:-20}} animate={{opacity:1,x:0}} transition={{duration:.8,ease}} className="flex items-center gap-3 text-[10px] uppercase tracking-[.32em] text-[#d8bd83]"><span className="h-px w-10 bg-[#d8bd83]"/>Boutique hospitality / Madhya Pradesh</motion.div>
+              <motion.h1 initial={{opacity:0,y:32}} animate={{opacity:1,y:0}} transition={{duration:1,delay:.08,ease}} className="serif mt-6 max-w-4xl text-[15vw] leading-[.79] tracking-[-.045em] text-white sm:text-8xl md:text-[9rem]">Raj<br/><span className="ml-[7vw] text-[#d8bd83]">Villas.</span></motion.h1>
+              <div className="mt-9 flex flex-col gap-7 md:flex-row md:items-end md:justify-between">
+                <p className="max-w-md text-sm leading-7 text-white/62 md:text-base">A relaxed hotel stay in Shivpuri, shaped by warm hospitality, generous light and the unhurried rhythm of central India.</p>
+                <a href="#stay" className="group inline-flex w-fit items-center gap-3 text-[10px] uppercase tracking-[.24em] text-white/75">Enter the hotel <span className="grid h-10 w-10 place-items-center rounded-full border border-white/20 transition group-hover:border-[#d8bd83] group-hover:bg-[#d8bd83] group-hover:text-[#15130f]"><ArrowDownRight size={16}/></span></a>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+        <div className="absolute bottom-7 left-6 hidden items-center gap-3 text-[9px] uppercase tracking-[.25em] text-white/35 md:flex md:left-10"><span>26° north / Shivpuri</span><span className="h-px w-16 bg-white/15"/></div>
+      </section>
 
-   <section className="mx-auto max-w-7xl px-6 pb-28 md:px-10"><div className="grid gap-5 md:grid-cols-[1.15fr_.85fr] md:items-stretch">
-    <motion.div variants={reveal} initial="hidden" whileInView="visible" viewport={{once:true}} className="group relative min-h-[560px] overflow-hidden rounded-[2rem] bg-black md:min-h-[680px]"><ParallaxImage src={images.room} alt="Boutique hotel bedroom" className="absolute inset-0 h-full w-full"/><div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-7 text-white"><div className="text-[10px] uppercase tracking-[.25em] text-white/60">01 / Rooms</div><div className="serif mt-2 text-3xl md:text-4xl">Comfort with character</div><div className="mt-2 max-w-md text-sm leading-6 text-white/65">Warm textures, restful proportions and a slower pace.</div></div></motion.div>
-    <div className="grid gap-5">
-      <motion.div variants={reveal} initial="hidden" whileInView="visible" viewport={{once:true}} className="group relative min-h-[330px] overflow-hidden rounded-[2rem] bg-black"><ParallaxImage src={images.dining} alt="Hotel dining" className="absolute inset-0 h-full w-full"/><div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-6 text-white"><div className="text-[10px] uppercase tracking-[.25em] text-white/60">02 / Dining</div><div className="serif mt-2 text-2xl">A table worth lingering at</div></div></motion.div>
-      <motion.div variants={reveal} initial="hidden" whileInView="visible" viewport={{once:true}} className="group relative min-h-[330px] overflow-hidden rounded-[2rem] bg-black"><ParallaxImage src={images.lounge} alt="Quiet hotel lounge" className="absolute inset-0 h-full w-full"/><div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-6 text-white"><div className="text-[10px] uppercase tracking-[.25em] text-white/60">03 / Lounge</div><div className="serif mt-2 text-2xl">A quieter kind of luxury</div></div></motion.div>
-    </div>
-   </div></section>
+      <section id="stay" className="relative mx-auto max-w-[1400px] px-6 py-28 md:px-10 md:py-40">
+        <motion.div variants={reveal} initial="hidden" whileInView="visible" viewport={{once:true}} className="grid gap-12 md:grid-cols-[.8fr_1.2fr] md:items-end">
+          <div><div className="text-[9px] uppercase tracking-[.32em] text-[#9a7942]">01 / The stay</div><h2 className="serif mt-5 text-5xl leading-[.9] sm:text-6xl md:text-8xl">A place to<br/><span className="text-[#9c7943]">settle in.</span></h2></div>
+          <div className="max-w-xl md:pb-2"><p className="text-base leading-8 text-[#615a4f] md:text-lg">Not a lobby you rush through. Not a room you only sleep in. Raj Villas is designed around the small rituals that make a trip feel like a stay.</p><div className="mt-10 grid grid-cols-3 border-t border-[#d5cab9] pt-6"><div><div className="serif text-2xl">01</div><div className="mt-2 text-[9px] uppercase tracking-[.2em] text-[#877d6e]">Rest</div></div><div><div className="serif text-2xl">02</div><div className="mt-2 text-[9px] uppercase tracking-[.2em] text-[#877d6e]">Gather</div></div><div><div className="serif text-2xl">03</div><div className="mt-2 text-[9px] uppercase tracking-[.2em] text-[#877d6e]">Return</div></div></div></div>
+        </motion.div>
 
-   <section id="experience" className="overflow-hidden bg-[#e9e1d3]"><div className="mx-auto grid max-w-7xl gap-12 px-6 py-24 md:grid-cols-[.85fr_1.15fr] md:items-center md:px-10 md:py-32"><motion.div variants={reveal} initial="hidden" whileInView="visible" viewport={{once:true}}><div className="text-[10px] uppercase tracking-[.28em] text-[#9b7b43]">The Raj Villas feeling</div><h2 className="serif mt-4 text-4xl leading-tight md:text-6xl">Thoughtful details.<br/><span className="text-[#9b7b43]">Nothing loud.</span></h2><p className="mt-7 max-w-lg leading-8 text-[#665f53]">From the welcome to the last cup of chai, the experience is intentionally warm, composed and easy.</p></motion.div><div className="grid grid-cols-2 gap-px overflow-hidden rounded-[2rem] border border-[#cfc4b2] bg-[#cfc4b2]">{[["01","Rest","Quiet rooms, comfortable beds and a calm palette."],["02","Gather","Spaces for meals, meetings and slow conversations."],["03","Explore","A convenient base for Shivpuri’s heritage and nature."],["04","Return","A familiar welcome whenever the road brings you back."]].map(([n,t,d])=><motion.div key={n} whileHover={{y:-5}} transition={{type:"spring",stiffness:300,damping:24}} className="bg-[#f0e8da] p-6 md:p-8"><div className="text-[10px] tracking-[.2em] text-[#a88a58]">{n}</div><div className="serif mt-10 text-2xl">{t}</div><p className="mt-3 text-sm leading-6 text-[#70685b]">{d}</p></motion.div>)}</div></div></section>
+        <div className="mt-20 grid gap-7 md:grid-cols-[1.2fr_.8fr]">
+          <motion.figure variants={reveal} initial="hidden" whileInView="visible" viewport={{once:true}} className="group relative min-h-[620px] overflow-hidden rounded-[2.4rem] bg-[#1b1915] md:min-h-[760px]"><DepthFrame src={media.room} alt="Raj Villas guest room" className="absolute inset-0 h-full w-full"/><figcaption className="absolute bottom-0 left-0 right-0 p-7 md:p-9"><div className="text-[9px] uppercase tracking-[.28em] text-white/50">Rooms / Rest</div><div className="serif mt-2 text-3xl text-white md:text-4xl">Comfort with character.</div></figcaption></motion.figure>
+          <div className="grid gap-7 md:pt-24"><motion.figure variants={reveal} initial="hidden" whileInView="visible" viewport={{once:true}} className="group relative min-h-[350px] overflow-hidden rounded-[2.4rem] bg-[#1b1915]"><DepthFrame src={media.lounge} alt="Raj Villas lounge" className="absolute inset-0 h-full w-full"/><figcaption className="absolute bottom-0 left-0 right-0 p-6"><div className="text-[9px] uppercase tracking-[.28em] text-white/50">Lounge / Gather</div><div className="serif mt-2 text-2xl text-white">Unhurried evenings.</div></figcaption></motion.figure><motion.div variants={reveal} initial="hidden" whileInView="visible" viewport={{once:true}} className="rounded-[2.4rem] bg-[#e7dece] p-7 md:p-8"><div className="text-[9px] uppercase tracking-[.28em] text-[#9a7942]">The essentials</div><div className="mt-7 grid gap-6"><div className="flex gap-4"><Clock3 className="mt-1 text-[#9b7946]" size={19}/><div><div className="serif text-xl">Easy arrivals</div><p className="mt-1 text-sm leading-6 text-[#706759]">A simple, direct check-in experience for a smoother first hour.</p></div></div><div className="flex gap-4"><MapPin className="mt-1 text-[#9b7946]" size={19}/><div><div className="serif text-xl">Close to Shivpuri</div><p className="mt-1 text-sm leading-6 text-[#706759]">A comfortable base for the town, heritage and surrounding nature.</p></div></div></div></motion.div></div>
+        </div>
+      </section>
 
-   <section id="dining" className="mx-auto max-w-7xl px-6 py-24 md:px-10 md:py-32"><div className="grid gap-12 md:grid-cols-2 md:items-center"><motion.div variants={reveal} initial="hidden" whileInView="visible" viewport={{once:true}} className="order-2 md:order-1"><div className="text-[10px] uppercase tracking-[.28em] text-[#9b7b43]">Dining</div><h2 className="serif mt-4 text-4xl md:text-6xl">Good food, <br/><em className="font-normal text-[#9b7b43]">warm company.</em></h2><p className="mt-7 max-w-lg leading-8 text-[#625a4d]">A relaxed dining experience for breakfast, dinner and those in-between chai moments. Expect familiar Indian flavours, generous hospitality and a setting that invites you to stay a little longer.</p><button onClick={()=>setRoomOpen(true)} className="mt-8 flex items-center gap-2 text-sm font-semibold uppercase tracking-[.18em] text-[#715b37]">Enquire for dining <ArrowUpRight size={16}/></button></motion.div><motion.div variants={reveal} initial="hidden" whileInView="visible" viewport={{once:true}} className="order-1 md:order-2 min-h-[520px] overflow-hidden rounded-[2rem]"><ParallaxImage src={images.dining} alt="Hotel dining" className="h-full w-full"/></motion.div></div></section>
+      <ExperienceScene/>
 
-   <section id="discover" className="bg-[#171512] text-white"><div className="mx-auto max-w-7xl px-6 py-24 md:px-10 md:py-32"><div className="max-w-3xl"><div className="text-[10px] uppercase tracking-[.28em] text-[#d4bd88]">Discover Shivpuri</div><h2 className="serif mt-4 text-4xl md:text-6xl">Heritage, forest, <span className="text-[#d4bd88]">open skies.</span></h2><p className="mt-7 max-w-2xl leading-8 text-white/60">Shivpuri combines royal-era architecture with lakes, forests and historic places. Use Raj Villas as a calm base between outings.</p></div><div className="mt-12 grid gap-4 sm:grid-cols-3">{[["Madhav National Park","Nature & wildlife",images.heritage],["Scindia Chhatris","Heritage architecture",images.heritage],["George Castle","Panoramic views",images.hero]].map(([a,b,img],i)=><motion.div key={a} variants={reveal} initial="hidden" whileInView="visible" viewport={{once:true}} transition={{delay:i*.08}} whileHover={{y:-8,rotateX:2,rotateY:i===1?0:1}} className="group overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/5 [transform-style:preserve-3d]"><div className="h-56 overflow-hidden"><img src={img} alt={a} className="h-full w-full object-cover opacity-75 transition duration-700 group-hover:scale-105"/></div><div className="p-5"><div className="text-[10px] uppercase tracking-[.22em] text-[#d4bd88]">{b}</div><div className="serif mt-2 text-2xl">{a}</div></div></motion.div>)}</div></div></section>
+      <section id="dining" className="relative overflow-hidden bg-[#e7dece] py-28 md:py-40">
+        <div className="mx-auto max-w-[1400px] px-6 md:px-10">
+          <div className="grid gap-16 lg:grid-cols-[.8fr_1.2fr] lg:items-center">
+            <motion.div variants={reveal} initial="hidden" whileInView="visible" viewport={{once:true}} className="max-w-xl">
+              <div className="flex items-center gap-3 text-[9px] uppercase tracking-[.3em] text-[#9a7942]"><span className="h-px w-8 bg-[#9a7942]"/>02 / Dining</div>
+              <h2 className="serif mt-5 text-5xl leading-[.9] md:text-8xl">Come for the<br/><span className="text-[#9c7943]">table.</span></h2>
+              <p className="mt-8 max-w-md text-base leading-8 text-[#655d51]">A warm room, familiar flavours and the kind of meal that makes you forget the time.</p>
+              <button onClick={()=>setReserve(true)} className="mt-9 inline-flex items-center gap-3 text-[10px] uppercase tracking-[.23em] text-[#4e4435]">Ask about dining <ArrowUpRight size={16}/></button>
+            </motion.div>
+            <motion.div variants={reveal} initial="hidden" whileInView="visible" viewport={{once:true}} className="relative [perspective:1300px]"><motion.div whileHover={{rotateY:-2,rotateX:1,scale:1.01}} transition={{type:"spring",stiffness:220,damping:25}} className="relative aspect-[1.08/1] overflow-hidden rounded-[2.5rem] bg-black shadow-[0_35px_90px_rgba(52,40,20,.16)] [transform-style:preserve-3d]"><DepthFrame src={media.dining} alt="Raj Villas dining room" className="h-full w-full"/><div className="absolute left-6 top-6 rounded-full border border-white/20 bg-black/20 px-4 py-2 text-[9px] uppercase tracking-[.25em] text-white backdrop-blur">Shivpuri / Dining</div></motion.div></motion.div>
+          </div>
+        </div>
+      </section>
 
-   <section id="contact" className="bg-[#e9e1d3]"><div className="mx-auto max-w-7xl px-6 py-20 md:px-10 md:py-28"><div className="grid gap-10 md:grid-cols-[1fr_auto] md:items-end"><div><div className="text-[10px] uppercase tracking-[.28em] text-[#9b7b43]">Contact</div><h2 className="serif mt-4 text-4xl md:text-6xl">Make your next stay <em className="font-normal text-[#9b7b43]">easy.</em></h2><p className="mt-5 max-w-xl text-[#655e53]">For reservations, room enquiries or help planning your visit to Shivpuri, speak with our team.</p></div><button onClick={()=>setRoomOpen(true)} className="flex items-center justify-center gap-2 rounded-full bg-[#1b1916] px-7 py-4 text-sm font-semibold text-white hover:bg-black">Reserve at Raj Villas <ArrowUpRight size={17}/></button></div><div className="mt-12 grid gap-4 border-t border-[#cfc4b2] pt-8 sm:grid-cols-3"><a href="tel:9999999990" className="group flex items-center gap-4 rounded-2xl border border-[#d2c7b5] bg-[#f1e9dc] p-5"><Phone className="text-[#9b7b43]"/><span><span className="block text-[10px] uppercase tracking-[.2em] text-[#817867]">Call</span><span className="mt-1 block text-sm font-medium group-hover:text-[#9b7b43]">9999999990</span></span></a><a href="mailto:jwhvebjefb@gmail.com" className="group flex items-center gap-4 rounded-2xl border border-[#d2c7b5] bg-[#f1e9dc] p-5"><Mail className="text-[#9b7b43]"/><span><span className="block text-[10px] uppercase tracking-[.2em] text-[#817867]">Email</span><span className="mt-1 block break-all text-sm font-medium group-hover:text-[#9b7b43]">jwhvebjefb@gmail.com</span></span></a><div className="flex items-center gap-4 rounded-2xl border border-[#d2c7b5] bg-[#f1e9dc] p-5"><MapPin className="text-[#9b7b43]"/><span><span className="block text-[10px] uppercase tracking-[.2em] text-[#817867]">Find us</span><span className="mt-1 block text-sm font-medium">Shivpuri, Madhya Pradesh</span></span></div></div></div></section>
-  </main>
-  <footer className="bg-[#171512] px-6 py-8 text-white/50 md:px-10"><div className="mx-auto flex max-w-7xl flex-col gap-5 text-xs sm:flex-row sm:items-center sm:justify-between"><div className="serif text-lg text-white">Raj Villas Hotel</div><div>Shivpuri, Madhya Pradesh · 9999999990</div><a href="mailto:jwhvebjefb@gmail.com" className="hover:text-white">jwhvebjefb@gmail.com</a></div></footer>
-  {roomOpen&&<div className="fixed inset-0 z-[60] grid place-items-center bg-black/65 p-4 backdrop-blur-sm" onClick={()=>setRoomOpen(false)}><div className="w-full max-w-lg rounded-[2rem] bg-[#f5f1e9] p-7 shadow-2xl md:p-9" onClick={e=>e.stopPropagation()}><div className="flex items-start justify-between"><div><div className="text-[10px] uppercase tracking-[.25em] text-[#9b7b43]">Reservations</div><h3 className="serif mt-2 text-4xl">Plan your stay</h3></div><button onClick={()=>setRoomOpen(false)} aria-label="Close"><X/></button></div><p className="mt-5 text-sm leading-6 text-[#676055]">Call or email Raj Villas and the team can confirm availability and stay details.</p><div className="mt-7 grid gap-3"><a href="tel:9999999990" className="flex items-center justify-between rounded-2xl bg-[#1b1916] px-5 py-4 text-sm font-semibold text-white">Call 9999999990 <Phone size={17}/></a><a href="mailto:jwhvebjefb@gmail.com" className="flex items-center justify-between rounded-2xl border border-[#d3c8b6] bg-white/40 px-5 py-4 text-sm font-semibold">Email the hotel <Mail size={17}/></a></div><div className="mt-7 flex items-center gap-2 text-xs text-[#817867]"><Star size={13} className="fill-[#9b7b43] text-[#9b7b43]"/> Direct contact • Shivpuri, Madhya Pradesh</div></div></div>}
- </div>
+      <section id="discover" className="bg-[#15130f] py-28 text-white md:py-40">
+        <div className="mx-auto max-w-[1400px] px-6 md:px-10">
+          <motion.div variants={reveal} initial="hidden" whileInView="visible" viewport={{once:true}} className="grid gap-10 md:grid-cols-[.65fr_1.35fr] md:items-end"><div><div className="text-[9px] uppercase tracking-[.3em] text-[#d6bc83]">03 / Shivpuri</div><h2 className="serif mt-5 text-5xl leading-[.9] md:text-8xl">Go beyond<br/><span className="text-[#d6bc83]">the room.</span></h2></div><p className="max-w-lg pb-2 text-sm leading-7 text-white/50 md:text-base">Forest mornings, old architecture and open skies make Shivpuri a place worth lingering in. Build a day around the places that feel distinctly local.</p></motion.div>
+          <div className="mt-16 grid gap-7 lg:grid-cols-[1.25fr_.75fr]">
+            <motion.div variants={reveal} initial="hidden" whileInView="visible" viewport={{once:true}} className="group relative min-h-[620px] overflow-hidden rounded-[2.5rem] lg:min-h-[680px]"><DepthFrame src={media.heritage} alt="Heritage architecture in India" className="absolute inset-0 h-full w-full"/><div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/10"/><div className="absolute bottom-8 left-8 right-8 flex items-end justify-between"><div><div className="text-[9px] uppercase tracking-[.27em] text-white/45">Nature / Heritage</div><div className="serif mt-2 text-3xl md:text-4xl">Madhav National Park</div></div><div className="grid h-12 w-12 place-items-center rounded-full border border-white/20 bg-white/10 backdrop-blur"><Compass size={18}/></div></div></motion.div>
+            <div className="grid gap-7"><motion.div variants={reveal} initial="hidden" whileInView="visible" viewport={{once:true}} className="rounded-[2.5rem] bg-[#222019] p-8 md:p-10"><Leaf className="text-[#d6bc83]" size={22}/><div className="serif mt-12 text-3xl">Scindia Chhatris</div><p className="mt-4 text-sm leading-7 text-white/48">A distinctive Shivpuri landmark for an architecture-led detour.</p><a href="#contact" className="mt-7 inline-flex items-center gap-2 text-[9px] uppercase tracking-[.24em] text-[#d6bc83]">Plan the day <ArrowUpRight size={14}/></a></motion.div><motion.div variants={reveal} initial="hidden" whileInView="visible" viewport={{once:true}} className="relative min-h-[300px] overflow-hidden rounded-[2.5rem]"><DepthFrame src={media.pool} alt="Poolside hotel atmosphere" className="absolute inset-0 h-full w-full"/><div className="absolute bottom-6 left-6 text-white"><div className="text-[9px] uppercase tracking-[.27em] text-white/45">Return / Unwind</div><div className="serif mt-2 text-2xl">End the day slowly.</div></div></motion.div></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="contact" className="relative overflow-hidden bg-[#e7dece] py-28 md:py-40">
+        <div className="pointer-events-none absolute right-0 top-0 h-[520px] w-[520px] rounded-full bg-[#c6a76e]/10 blur-3xl"/>
+        <div className="relative mx-auto max-w-[1400px] px-6 md:px-10">
+          <motion.div variants={reveal} initial="hidden" whileInView="visible" viewport={{once:true}} className="grid gap-12 lg:grid-cols-[1fr_.65fr] lg:items-end"><div><div className="text-[9px] uppercase tracking-[.3em] text-[#9a7942]">04 / Reservations</div><h2 className="serif mt-5 max-w-4xl text-5xl leading-[.9] md:text-8xl">Make the next<br/><span className="text-[#9c7943]">stay easy.</span></h2></div><div className="lg:pb-2"><p className="max-w-md text-base leading-8 text-[#655d51]">For room enquiries, dining or help planning your visit, speak directly with the Raj Villas team.</p><button onClick={()=>setReserve(true)} className="mt-8 inline-flex items-center gap-3 rounded-full bg-[#171512] px-7 py-4 text-[10px] font-semibold uppercase tracking-[.2em] text-white transition-transform hover:scale-[1.02]">Reserve your stay <ArrowUpRight size={16}/></button></div></motion.div>
+          <div className="mt-16 grid gap-4 border-t border-[#cfc3b1] pt-8 md:grid-cols-3"><a href="tel:9999999990" className="group rounded-2xl border border-[#d0c4b1] bg-white/30 p-6"><Phone size={19} className="text-[#9a7942]"/><div className="mt-10 text-[9px] uppercase tracking-[.22em] text-[#827867]">Call</div><div className="mt-1 text-sm font-medium group-hover:text-[#9a7942]">9999999990</div></a><a href="mailto:jwhvebjefb@gmail.com" className="group rounded-2xl border border-[#d0c4b1] bg-white/30 p-6"><Mail size={19} className="text-[#9a7942]"/><div className="mt-10 text-[9px] uppercase tracking-[.22em] text-[#827867]">Email</div><div className="mt-1 text-sm font-medium group-hover:text-[#9a7942]">jwhvebjefb@gmail.com</div></a><div className="rounded-2xl border border-[#d0c4b1] bg-white/30 p-6"><MapPin size={19} className="text-[#9a7942]"/><div className="mt-10 text-[9px] uppercase tracking-[.22em] text-[#827867]">Location</div><div className="mt-1 text-sm font-medium">Shivpuri, Madhya Pradesh</div></div></div>
+        </div>
+      </section>
+    </main>
+
+    <footer className="bg-[#15130f] px-6 py-8 text-white/45 md:px-10"><div className="mx-auto flex max-w-[1400px] flex-col gap-4 text-[11px] sm:flex-row sm:items-center sm:justify-between"><div className="serif text-lg text-white">Raj Villas Hotel</div><div>Shivpuri, Madhya Pradesh</div><a href="mailto:jwhvebjefb@gmail.com" className="hover:text-white">jwhvebjefb@gmail.com</a></div></footer>
+
+    {reserve&&<div className="fixed inset-0 z-[70] grid place-items-center bg-black/70 p-4 backdrop-blur-md" onClick={()=>setReserve(false)}><motion.div initial={{opacity:0,y:24,scale:.96}} animate={{opacity:1,y:0,scale:1}} transition={{duration:.45,ease}} className="w-full max-w-xl rounded-[2rem] border border-white/10 bg-[#f4efe6] p-7 shadow-[0_40px_120px_rgba(0,0,0,.45)] md:p-9" onClick={e=>e.stopPropagation()}><div className="flex items-start justify-between"><div><div className="text-[9px] uppercase tracking-[.3em] text-[#9a7942]">Raj Villas / Reservations</div><h3 className="serif mt-3 text-4xl">Plan your stay.</h3></div><button onClick={()=>setReserve(false)} aria-label="Close reservation dialog"><X/></button></div><p className="mt-5 max-w-md text-sm leading-7 text-[#665f53]">Call or email the hotel directly for availability, room details and stay planning.</p><div className="mt-8 grid gap-3"><a href="tel:9999999990" className="flex items-center justify-between rounded-2xl bg-[#171512] px-5 py-4 text-sm font-semibold text-white">Call 9999999990 <Phone size={18}/></a><a href="mailto:jwhvebjefb@gmail.com" className="flex items-center justify-between rounded-2xl border border-[#d0c4b1] px-5 py-4 text-sm font-semibold">Email the hotel <Mail size={18}/></a></div><div className="mt-7 flex items-center gap-2 text-xs text-[#7e7567]"><Star size={13} className="fill-[#9a7942] text-[#9a7942]"/> Direct contact · Shivpuri, Madhya Pradesh</div></motion.div></div>}
+  </div>
 }
+
 createRoot(document.getElementById("root")).render(<App/>);
