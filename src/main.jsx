@@ -1,7 +1,7 @@
 import React,{useState} from "react";
 import {createRoot} from "react-dom/client";
 import {motion} from "framer-motion";
-import {ArrowUpRight,ChevronDown,MapPin,Phone,Mail,Menu,X,Star,Sparkles,Clock3,Instagram} from "lucide-react";
+import {ArrowUpRight,ChevronDown,MapPin,Phone,Mail,Menu,X,Star,Sparkles,Clock3} from "lucide-react";
 import "./index.css";
 
 const images={
@@ -110,7 +110,7 @@ function App(){
 
     <section id="discover" className="bg-[#171512] text-white">
       <div className="mx-auto max-w-7xl px-6 py-24 md:px-10 md:py-32">
-       <div className="max-w-3xl"><div className="text-[10px] uppercase tracking-[.28em] text-[#d4bd88]">Discover Shivpuri</div><h2 className="serif mt-4 text-4xl md:text-6xl">Heritage, forest, <span className="text-[#d4bd88]">open skies.</span></h2><p className="mt-7 max-w-2xl leading-8 text-white/60">Shivpuri carries a distinctive royal legacy alongside lakes, forests and historic architecture. It is known for places including Madhav National Park, George Castle and the Scindia chhatris. citeturn852678search0turn852678search2turn852678search4</p></div>
+       <div className="max-w-3xl"><div className="text-[10px] uppercase tracking-[.28em] text-[#d4bd88]">Discover Shivpuri</div><h2 className="serif mt-4 text-4xl md:text-6xl">Heritage, forest, <span className="text-[#d4bd88]">open skies.</span></h2><p className="mt-7 max-w-2xl leading-8 text-white/60">Shivpuri carries a distinctive royal legacy alongside lakes, forests and historic architecture. It is known for places including Madhav National Park, George Castle and the Scindia chhatris.</p></div>
        <div className="mt-12 grid gap-4 sm:grid-cols-3">
         {[["Madhav National Park","Nature & wildlife",images.heritage],["Scindia Chhatris","Heritage architecture",images.heritage],["George Castle","Panoramic views",images.hero]].map(([a,b,img])=><div key={a} className="group overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/5"><div className="h-56 overflow-hidden"><img src={img} alt={a} className="h-full w-full object-cover opacity-75 transition duration-700 group-hover:scale-105"/></div><div className="p-5"><div className="text-[10px] uppercase tracking-[.22em] text-[#d4bd88]">{b}</div><div className="serif mt-2 text-2xl">{a}</div></div></div>)}
        </div>
