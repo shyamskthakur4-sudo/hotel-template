@@ -1,8 +1,13 @@
 @import "tailwindcss";
 
 :root{font-family:"DM Sans",sans-serif;color:#24211c;background:#f5f1e9;font-synthesis:none;text-rendering:optimizeLegibility}
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;background:#171512}
 body{margin:0;min-width:320px;background:#f5f1e9}
 h1,h2,h3,.serif{font-family:"Playfair Display",serif}
 ::selection{background:#b69a63;color:#fff}
 *{box-sizing:border-box}
+::before,::after{box-sizing:border-box}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
